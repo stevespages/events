@@ -15,6 +15,9 @@ class Events {
       $data['hr_st'] = intval(substr($post['time'], 0, 2)) ? : null;
       $data['min_st'] = intval((substr($post['time'], -2))) ? : null;
     }
+
+    // I think you could just leave time out of it
+    // See strtotime() and date-and-time formats at php.net
     // If time is not set make it '00:00' so ts_tz can be calculated
     // what is the :00+0000 ??? seconds and thousandths of secs??
     if(!isset($post['time']) || $post['time'] === ''){
@@ -60,4 +63,69 @@ class Events {
     $stmt->execute();
   
   }
+
+  public function getList($db, $yr, $mth = null, $day = null) {
+
+    // Valid arguments:
+    // $yr
+    // $yr and $month
+    // $yr and $month and $day
+    // Invalid arguments:
+    // $yr and $day. This probably causes an error.
+
+    // If $day isset get events for that day
+    // If $day is null get events for a full month
+    // If $mth and $day is null get events for a full year
+    // If $day is set but $mth is null it is an error. How to prevent?
+
+    // Convert strings to integers.
+    // Assign default values to arguments that were not supplied.
+    $yr = intval($yr);
+    $mth = $mth ? intval($mth) : null;
+    $day = $day ? intval($day) : null;
+
+    $data = [];
+    $data['yr'] = $yr;
+    $data['mth'] = $mth;
+    $data['day'] = $day;
+
+    if(is_null($mth) && is_null($day)){
+      $datetime = $yr . '-01-01';
+      $tsTzFrom = strtotime($datetime);
+      $tsTzTo = strtotime('+ 1 year', $tsTzFrom);
+    }
+
+    if(!is_null($mth) && is_null($day)){
+      $datetime = $yr . '-' . $mth . '-01';
+      $tsTzFrom = strtotime($datetime);
+      $tsTzTo = strtotime('+ 1 month', $tsTzFrom);
+    }
+
+    if(!is_null($mth) && !is_null($day)){
+      $datetime = $yr . '-' . $mth . '-' . $day;
+      $tsTzFrom = strtotime($datetime);
+      $tsTzTo = strtotime('+ 1 day', $tsTzFrom);
+    }
+
+    $data['datetime'] = $datetime;
+    $data['ts-tz-from'] = $tsTzFrom;
+    $data['ts-tz-to'] = $tsTzTo;
+
+    echo '<pre><code>';
+    var_dump($data);
+    echo '</code></pre>';
+
+    $sql = "SELECT title, detail FROM events WHERE ts_tz_st > :ts_tz_from";
+    $sql .= " AND ts_tz_st < :ts_tz_to";
+
+    // $sql = "SELECT title, detail FROM events";
+    
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ts_tz_from', $data['ts-tz-from']);
+    $stmt->bindParam(':ts_tz_to', $data['ts-tz-to']);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+  }
+
 }

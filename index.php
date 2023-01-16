@@ -5,8 +5,9 @@ require_once './php/Events.php';
 require_once './php/functions.php';
 require_once './config.php';
 
+$events = new Events();
+
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-  $events = new Events();
   $events->createEvent($db, $_POST);
 }
 
@@ -45,6 +46,46 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     </fieldset>
   </form>
   <h2>Display Events List</h2>
+
+  <h3>$events->getList($db, 2023);</h3>
+  <p>
+    We want to show 1 year of events: from 2023-01-01 to 2024-01-01.
+  </p>
+<?php
+$result = $events->getList($db, 2023);
+echo '<h4>result</h4>';
+var_dump($result);
+?>
+
+  <h3>$events->getList($db, 2023, 1,);</h3>
+  <p>
+    We want to show 1 month of events: from 2023-01-01 to 2023-02-01.
+  </p>
+<?php
+$result = $events->getList($db, 2023, 1);
+echo '<h4>result</h4>';
+var_dump($result);
+?>
+
+  <h3>$events->getList($db, 2023, 1, 1);</h3>
+  <p>
+    We want to show 1 day of events: from 2023-01-01 to 2023-01-02.
+  </p>
+<?php
+$result = $events->getList($db, 2023, 1, 1);
+echo '<h4>result</h4>';
+var_dump($result);
+?>
+
+  <h3>Unix timestamps for the above dates</h3>
+<?php
+  echo '<p>2023-01-01 - '. strtotime('2023-01-01') . '</p>';
+  echo '<p>****************</p>';
+  echo '<p>2024-01-01 - '. strtotime('2024-01-01') . '</p>';
+  echo '<p>2023-02-01 - '. strtotime('2023-02-01') . '</p>';
+  echo '<p>2023-01-02 - '. strtotime('2023-01-02') . '</p>';
+?>
+
   <h2>Display Events Calendar</h2>
 </body>
 </html>
