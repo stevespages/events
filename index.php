@@ -1,8 +1,9 @@
 <?php
 
-require_once '../../php/error-reporting.php';
-require_once '../../php/Events.php';
-require_once '../../php/db-functions.php';
+require_once './php/error-reporting.php';
+require_once './php/Events.php';
+require_once './php/functions.php';
+require_once './config.php';
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $events = new Events();
@@ -17,6 +18,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./css/main.css" rel="stylesheet">
   <title>Document</title>
 </head>
 <body>

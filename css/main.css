@@ -1,0 +1,14 @@
+.simple-form input, .simple-form select {
+  display: block;
+  margin-bottom: 1.1em;
+}
+
+/*
+  For styling $calendar->showMth();
+*/
+.prev, .nxt {
+  color: grey;
+}
+table caption a {
+  text-decoration: none;
+}
