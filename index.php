@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once './php/error-reporting.php';
 require_once './php/Events.php';
 require_once './php/functions.php';
@@ -30,6 +32,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
   <p>
     Some basic functionality is provided here which demonstrates the usage of Events. Displaying events and filtering them prior to display are considered here as well as attaching them to the output of the Calendar class for display in calendar format.
   </p>
+
+<?php
+  if (empty($_SESSION['user'])){
+    echo "<p><a href='./authentication/login/'>Login</a> or ";
+    echo "<a href='./authentication/register/'>Register</a></p>";
+  } else {
+    echo "<p>";
+    echo "Hallo ".$_SESSION['user'];
+    echo " | <a href='./authentication/logout/'>Logout</a>";
+    echo " | <a href='./authentication/close-account/'>Close Account</a>";
+    echo "</p>";
+?>
+
   <h2>Create Event</h2>
   <form method = "post" class="simple-form">
     <fieldset>
@@ -87,5 +102,8 @@ var_dump($result);
 ?>
 
   <h2>Display Events Calendar</h2>
+
+<?php } ?> 
+
 </body>
 </html>
