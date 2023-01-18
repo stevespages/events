@@ -128,4 +128,44 @@ class Events {
     return $result;
   }
 
+  public function populateMonth($db, $month){
+    // generate $tsTzFrom
+    $yr = $month[0]['yr'];
+    $mth = $month[0]['mth'];
+    $day = $month[0]['day'];
+    $datetime = $yr . '-' . $mth . '-' . $day;
+    $tsTzfrom = strtotime($datetime);
+
+    // generate $tsTzTo
+    $yr = $month[count($month) -1 ]['yr'];
+    $mth = $month[count($month) -1 ]['mth'];
+    $day = $month[count($month) -1 ]['day'];
+    $datetime = $yr . '-' . $mth . '-' . $day . 'T23:59:59';
+    $tsTzTo = strtotime($datetime);
+
+    $sql = "SELECT day_n_st, title, detail FROM events WHERE ts_tz_st > :ts_tz_from";
+    $sql .= " AND ts_tz_st < :ts_tz_to";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':ts_tz_from', $tsTzfrom);
+    $stmt->bindParam(':ts_tz_to', $tsTzTo);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
+    var_dump($result);
+    echo '<p>*********</p>';
+
+    for($i = 0; $i < count($month); $i++){
+
+      if(isset($result[$month[$i]['day']])){
+        $month[$i]['events'] = $result[$month[$i]['day']];
+      }
+
+      $month[$i]['ts-tz-from'] = $tsTzfrom;
+      $month[$i]['ts-tz-to'] = $tsTzTo;
+      //echo '<p>hey ';
+      //echo $month[$i]['day'];
+      //echo '</p>';
+    }
+    return $month;
+  }
+
 }

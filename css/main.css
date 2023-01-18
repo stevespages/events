@@ -6,9 +6,26 @@
 /*
   For styling $calendar->showMth();
 */
+/*
 .prev, .nxt {
   color: grey;
 }
-table caption a {
+*/
+table.cal-ev {
+  border-collapse: collapse;
+}
+table.cal-ev a{
   text-decoration: none;
+}
+table.cal-ev th, table.cal-ev td {
+  border: 1px solid black;
+}
+table.cal-ev td.prev a, table.cal-ev td.nxt a{
+  color: grey;
+}
+table.cal-ev td.events a {
+  color: red;
+}
+table.cal-ev td.no-events.curr a {
+  color: black;
 }

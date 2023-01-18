@@ -350,7 +350,7 @@ if($eventsArr[$months['days']['day']){
   $months['days']['day']['events'] = $eventsArr[$months['days']['day']];
 }
 ```
-As *$months* is passed by reference to this function the changes to it will have occured and there is no need to return anything from this function. It has now been populated with events.
+As *$months* is passed by reference to this function the changes to it will have occured and there is no need to return anything from this function. It has now been populated *$months* with events.
 
 ## To Do
 

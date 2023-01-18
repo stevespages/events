@@ -4,10 +4,13 @@ session_start();
 
 require_once './php/error-reporting.php';
 require_once './php/Events.php';
+require_once './php/Calendar.php';
 require_once './php/functions.php';
+require_once './php/cal-demo.php';
 require_once './config.php';
 
 $events = new Events();
+$calendar = new Calendar();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   $events->createEvent($db, $_POST);
@@ -66,31 +69,34 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
   <p>
     We want to show 1 year of events: from 2023-01-01 to 2024-01-01.
   </p>
+<pre><code>
 <?php
 $result = $events->getList($db, 2023);
-echo '<h4>result</h4>';
 var_dump($result);
 ?>
+</code></pre>
 
   <h3>$events->getList($db, 2023, 1,);</h3>
   <p>
     We want to show 1 month of events: from 2023-01-01 to 2023-02-01.
   </p>
+<pre><code>
 <?php
 $result = $events->getList($db, 2023, 1);
-echo '<h4>result</h4>';
 var_dump($result);
 ?>
+</code></pre>
 
   <h3>$events->getList($db, 2023, 1, 1);</h3>
   <p>
     We want to show 1 day of events: from 2023-01-01 to 2023-01-02.
   </p>
+<pre><code>
 <?php
 $result = $events->getList($db, 2023, 1, 1);
-echo '<h4>result</h4>';
 var_dump($result);
 ?>
+</code></pre>
 
   <h3>Unix timestamps for the above dates</h3>
 <?php
@@ -101,8 +107,51 @@ var_dump($result);
   echo '<p>2023-01-02 - '. strtotime('2023-01-02') . '</p>';
 ?>
 
-  <h2>Display Events Calendar</h2>
+  <h2>Display Calendar</h2>
+  <p>
+    We have installed <a href="https://github.com/stevespages.org.uk/calendar">Calendar.php</a>. This can be used to output an array representing a month including parts of the previous and next month to make full weeks.
+  </p>
+  <h3>$calendar->createMonth(false, 2023, 1, false);</h3>
+<pre></code>
+<?php
+$result = $calendar->createMonth(false, 2023, 1, false);
+var_dump($result);
+?>
+</code></pre>
 
+  <h2>Display Events Calendar</h2>
+  <p>
+    Here, instead of false, we pass the Events object, $events, to Calendar::createMonth().
+  </p>
+  <h3>$calendar->createMonth(2023, 1, $events);</h3>
+  <pre></code>
+<?php
+$result = $calendar->createMonth($db, 2023, 1, $events);
+var_dump($result);
+?>
+</code></pre>
+<h3>Use cal-demo.php to display</h3>
+<?php
+calDemo($result);
+?>
+<h2>Groups of 3</h2>
+<?php
+$arr = [26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6];
+$i = 0;
+$iStop = 3;
+while(true){
+  echo '<p>';
+  for($i; $i < $iStop; $i++){
+    echo $arr[$i] . ', ';
+  }
+  echo '</p>';
+  if(isset($arr[$i + 1])){
+    $iStop = $iStop + 3;
+  } else {
+    break;
+  }
+}
+?>
 <?php } ?> 
 
 </body>
