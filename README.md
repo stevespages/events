@@ -66,6 +66,7 @@ This function persists HTML form post data to an SQL database. The required and 
 This function returns an array of events ordered by ts_tz_st which is the UT timestamp of the start of an event. If $yr, $mth and $day are not supplied as arguments, all the events in the database will be returned. If only the year is provided as an argument all events for that year will be returned. If the year and month is provided, the events for that month are returned. If a year, month and day are provided then the events for that day will be returned.
 
 ### Events::getMonth($db, $month)
+**REPLACED BY populateMonth()**
 
 This function requires a $month array, created by `Calendar::createMonth()`.
 The function modifies the $month array by adding an array of events for any "days" subarray in the $month array. Note that the $month array contains the full weeks that the calendar spans. Where a month does not start on a Monday the first week will contain days from the previous month. Where a month does not end on a Sunday the last week will contain days from the next month. An example of an array returned from this function is shown below.
@@ -292,6 +293,64 @@ array(5) {
   }
 }
 ```
+
+### Events::populateMonth($month)
+
+*$month* should be an array representing part or a whole month as in *prev*, *curr* and *nxt* months from the *Calendar* class. See (???) for the structure of the *$month* array.
+
+This function gets the year, month and day of the month of the first (also the earliest) day in $month and creates a timestamp from these values called *$tsTzFrom*. Similarly it creates $tsTzTo from the last day in $month.
+
+The events table and joined tables are queried for events between *$tsTzFrom* and *$tsTzTo*. The first column in the SELECT statement is *'day_n_st'*. in the PDO::fetchAll() method the *PDO::FETCH_GROUP* constant is used as an argument. So the returned array is grouped in subarrays, indexed by the day of the month (the values in *'day_n_st'*).
+
+An example of an array returned by the SQL query from a month in which there were 2 events on the 6th of the month and one event on the 19th is shown below:
+
+```
+array(2) {
+  [6]=>
+  array(2) {
+    [0]=>
+    array(4) {
+      ["hr_st"]=>
+      int(10)
+      ["min_st"]=>
+      int(30)
+      ["title"]=>
+      string(7) "Dentist"
+      ["detail"]=>
+      string(22) "Extraction and filling"
+    }
+    [1]=>
+    array(3) {
+      ["hr_st"]=>
+      int(16)
+      ["min_st"]=>
+      int(37)
+      ["title"]=>
+      string(15) "Train to London"
+    }
+  }
+  [19]=>
+  array(1) {
+    [0]=>
+    array(3) {
+      ["hr_st"]=>
+      int(11)
+      ["min_st"]=>
+      int(0)
+      ["title"]=>
+      string(11) "Golf Course"
+    }
+  }
+}
+```
+Now the function iterates through each day in *$months* executing the following:
+
+```
+if($eventsArr[$months['days']['day']){
+  $months['days']['day']['events'] = $eventsArr[$months['days']['day']];
+}
+```
+As *$months* is passed by reference to this function the changes to it will have occured and there is no need to return anything from this function. It has now been populated with events.
 
 ## To Do
 
