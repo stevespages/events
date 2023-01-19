@@ -322,3 +322,250 @@ if($eventsArr[$months['days']['day']){
 }
 ```
 The method returns the $month (month or part of a month of days) appended with an *"events* key with an array of events as value. If there are no events on a given day it will not be appended with an *"events"* key.
+
+## *Calendar* and *Events* used together
+
+We now look at using *Calendar::createMonth() where we pass an *Events* object and PDO database object to it as arguments.
+
+### Calendar::createMonth(obj $db, int $yr, int $mth, obj $events). Again!
+
+Previously we invoked this method with false for the first and last arguments. If our *Calendar* object was assigned to a variable called *$calendar* and our *Events* object was assigned to *$events* and our PDO database assigned to *$db* we can now invoke the function thus:
+
+```
+$calendar->createMonth($db, $yr, $mth, $events)
+```
+
+This will return an array similar to the array we saw earlier from this function but now the array elements in the *"days"* subarray will have another key value pair if there is one or more events scheduled on the day that array element represents. The key will be *"events"* and the value will be an array of one or more events. An example is shown below:
+
+```
+array(5) {
+  ["yr"]=>
+  int(2023)
+  ["mth"]=>
+  int(1)
+  ["mth-str"]=>
+  string(7) "January"
+  ["mth-str-abrev"]=>
+  string(3) "Jan"
+  ["days"]=>
+  array(42) {
+    [0]=>
+    array(4) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(26)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+    }
+    [1]=>
+    array(4) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(27)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+    }
+    [2]=>
+    array(4) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(28)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+    }
+    [3]=>
+    array(4) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(29)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+    }
+    [4]=>
+    array(4) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(30)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+    }
+    [5]=>
+    array(5) {
+      ["yr"]=>
+      int(2022)
+      ["mth"]=>
+      int(12)
+      ["day"]=>
+      int(31)
+      ["prev-curr-nxt"]=>
+      string(4) "prev"
+      ["events"]=>
+      array(1) {
+        [0]=>
+        array(4) {
+          ["hr_st"]=>
+          int(8)
+          ["min_st"]=>
+          int(30)
+          ["title"]=>
+          string(25) "Make New Years Resolution"
+          ["detail"]=>
+          string(23) "give it lots of thought"
+        }
+      }
+    }
+    [6]=>
+    array(5) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(1)
+      ["day"]=>
+      int(1)
+      ["prev-curr-nxt"]=>
+      string(4) "curr"
+      ["events"]=>
+      array(2) {
+        [0]=>
+        array(4) {
+          ["hr_st"]=>
+          int(12)
+          ["min_st"]=>
+          NULL
+          ["title"]=>
+          string(20) "New Year's Day Party"
+          ["detail"]=>
+          string(12) "fancy dress!"
+        }
+        [1]=>
+        array(4) {
+          ["hr_st"]=>
+          int(19)
+          ["min_st"]=>
+          int(30)
+          ["title"]=>
+          string(10) "Fireworks!"
+          ["detail"]=>
+          string(22) "At the football ground"
+        }
+      }
+    }
+    [7]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(1)
+      ["day"]=>
+      int(2)
+      ["prev-curr-nxt"]=>
+      string(4) "curr"
+    }
+    [8]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(1)
+      ["day"]=>
+      int(3)
+      ["prev-curr-nxt"]=>
+      string(4) "curr"
+
+// days ommited for brevity
+
+    [35]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(1)
+      ["day"]=>
+      int(30)
+      ["prev-curr-nxt"]=>
+      string(4) "curr"
+    }
+    [36]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(1)
+      ["day"]=>
+      int(31)
+      ["prev-curr-nxt"]=>
+      string(4) "curr"
+    }
+    [37]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(2)
+      ["day"]=>
+      int(1)
+      ["prev-curr-nxt"]=>
+      string(3) "nxt"
+    }
+    [38]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(2)
+      ["day"]=>
+      int(2)
+      ["prev-curr-nxt"]=>
+      string(3) "nxt"
+    }
+    [39]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(2)
+      ["day"]=>
+      int(3)
+      ["prev-curr-nxt"]=>
+      string(3) "nxt"
+    }
+    [40]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(2)
+      ["day"]=>
+      int(4)
+      ["prev-curr-nxt"]=>
+      string(3) "nxt"
+    }
+    [41]=>
+    array(4) {
+      ["yr"]=>
+      int(2023)
+      ["mth"]=>
+      int(2)
+      ["day"]=>
+      int(5)
+      ["prev-curr-nxt"]=>
+      string(3) "nxt"
+    }
+  }
+}
+```
