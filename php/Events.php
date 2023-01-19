@@ -1,7 +1,7 @@
 <?php
 
 class Events {
-  // 
+  
   public function createEvent($db, $post) {
     var_dump($post);
     $data = [];
@@ -15,16 +15,16 @@ class Events {
 
     // I think you could just leave time out of it
     // See strtotime() and date-and-time formats at php.net
-    // If time is not set make it '00:00' so ts_tz can be calculated
+    // If time is not set make it '00:00' so ts_ut can be calculated
     // what is the :00+0000 ??? seconds and thousandths of secs??
     if(!isset($post['time']) || $post['time'] === ''){
       $post['time'] = '00:00';
     }
     $dateTimeStr = $post['date'] . "T" . $post['time'] . ":00+0000";
-    // this wants to be ts_TZ. How can I ensure that?
+    // this wants to be ts_ut. How can I ensure that?
     // this gives false if time is not set
     $data['ts_ut_st'] = strtotime($dateTimeStr);
-    // After making sure ts_tz really is tz implement ts
+    // After making sure ts_ut really is ut implement ts
     // End times need to be implemented
     // Make locations, organizers and alarms tables. Then implement here
     $data['title'] = $post['title'];
@@ -98,25 +98,25 @@ class Events {
 
     if(is_null($mth) && is_null($day)){
       $datetime = $yr . '-01-01';
-      $tsTzFrom = strtotime($datetime);
-      $tsTzTo = strtotime('+ 1 year', $tsTzFrom);
+      $tsUtFrom = strtotime($datetime);
+      $tsUtTo = strtotime('+ 1 year', $tsUtFrom);
     }
 
     if(!is_null($mth) && is_null($day)){
       $datetime = $yr . '-' . $mth . '-01';
-      $tsTzFrom = strtotime($datetime);
-      $tsTzTo = strtotime('+ 1 month', $tsTzFrom);
+      $tsUtFrom = strtotime($datetime);
+      $tsUtTo = strtotime('+ 1 month', $tsUtFrom);
     }
 
     if(!is_null($mth) && !is_null($day)){
       $datetime = $yr . '-' . $mth . '-' . $day;
-      $tsTzFrom = strtotime($datetime);
-      $tsTzTo = strtotime('+ 1 day', $tsTzFrom);
+      $tsUtFrom = strtotime($datetime);
+      $tsUtTo = strtotime('+ 1 day', $tsUtFrom);
     }
 
     $data['datetime'] = $datetime;
-    $data['ts-ut-from'] = $tsTzFrom;
-    $data['ts-ut-to'] = $tsTzTo;
+    $data['ts-ut-from'] = $tsUtFrom;
+    $data['ts-ut-to'] = $tsUtTo;
 
     $sql = "SELECT title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
     $sql .= " AND ts_ut_st < :ts_ut_to";
@@ -132,25 +132,25 @@ class Events {
   }
 
   public function populateMonth($db, $month){
-    // generate $tsTzFrom
+    // generate $tsUtFrom
     $yr = $month[0]['yr'];
     $mth = $month[0]['mth'];
     $day = $month[0]['day'];
     $datetime = $yr . '-' . $mth . '-' . $day;
-    $tsTzfrom = strtotime($datetime);
+    $tsUtfrom = strtotime($datetime);
 
-    // generate $tsTzTo
+    // generate $tsUtTo
     $yr = $month[count($month) -1 ]['yr'];
     $mth = $month[count($month) -1 ]['mth'];
     $day = $month[count($month) -1 ]['day'];
     $datetime = $yr . '-' . $mth . '-' . $day . 'T23:59:59';
-    $tsTzTo = strtotime($datetime);
+    $tsUtTo = strtotime($datetime);
 
     $sql = "SELECT day_st, hr_st, min_st, title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
     $sql .= " AND ts_ut_st < :ts_ut_to";
     $stmt = $db->prepare($sql);
-    $stmt->bindParam(':ts_ut_from', $tsTzfrom);
-    $stmt->bindParam(':ts_ut_to', $tsTzTo);
+    $stmt->bindParam(':ts_ut_from', $tsUtfrom);
+    $stmt->bindParam(':ts_ut_to', $tsUtTo);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
 

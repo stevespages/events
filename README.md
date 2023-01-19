@@ -14,7 +14,7 @@ A number of other PHP and JavaScript files are included which contain code for d
 
 The description here is for the behavious of this function when an *Events* object and associated PDO Database object are not supplied as arguments. The behaviour when they are supplied is described in the section on the *Events* class.
 
-If this argument is supplied with the value, false, for the first and last arguments ($db and $events) it will return an array of days for month specified by the $yr and $mth arguments. Where a month does not start on a Monday the first week will contain days from the previous month. Where a month does not end on a Sunday the last week will contain days from the next month. An example of an array returned from this function is shown below.
+If this argument is supplied with the value, false, for the first and last arguments ($db and $events) it will return an array of days for the month specified by the $yr and $mth arguments. Where a month does not start on a Monday, the first week will contain days from the previous month. Where a month does not end on a Sunday, the last week will contain days from the next month. An example of an array returned from this function is shown below.
 
 Note that days from the previous month have a value of *"prev"* for the *"prev-curr-nxt"* key. Other days have *"curr"* or *"nxt"* indicating whether they are days from the month that was used in the $mth argument (*"curr"*) or the next month (*"nxt"*)
 
@@ -108,7 +108,7 @@ array(5) {
       string(4) "curr"
     }
     [7]=>
-    array(5) {
+    array(4) {
       ["yr"]=>
       int(2023)
       ["mth"]=>
@@ -117,58 +117,9 @@ array(5) {
       int(2)
       ["prev-curr-nxt"]=>
       string(4) "curr"
-      ["events"]=>
-      array(2) {
-        [0]=>
-        array(4) {
-          ["hr_st"]=>
-          int(10)
-          ["min_st"]=>
-          int(30)
-          ["title"]=>
-          string(7) "Dentist"
-          ["detail"]=>
-          string(22) "Filling and extraction"
-        }
-                [0]=>
-        array(5) {
-          ["hr_st"]=>
-          int(16)
-          ["min_st"]=>
-          int(00)
-          ["title"]=>
-          string(7) "Finance Meeting"
-          ["organizers-id"]=>
-          int(9)
-          ["category"]=>
-          string(6) "online"
-        }
-      }
     }
-    [8]=>
-    array(4) {
-      ["yr"]=>
-      int(2023)
-      ["mth"]=>
-      int(1)
-      ["day"]=>
-      int(3)
-      ["prev-curr-nxt"]=>
-      string(4) "curr"
-    }
-    [9]=>
-    array(4) {
-      ["yr"]=>
-      int(2023)
-      ["mth"]=>
-      int(1)
-      ["day"]=>
-      int(4)
-      ["prev-curr-nxt"]=>
-      string(4) "curr"
-    }
- 
-// several days have been omitted here
+
+// days have been ommited here for brevity
 
     [36]=>
     array(4) {
@@ -238,15 +189,16 @@ array(5) {
     }
   }
 }
+
 ```
 
 ## *Events* class
 
-Before describin the methods of this class, the fields or columns it requires in an SQL database are described
+Before describing the methods of this class, the fields or columns it requires in an SQL database are described. This database must have a table called *events* with the fields (columns) indicated in the tables below.
 
 ### Varibles / SQL Fields
 
-When an event is created using `Events::createEvent($db, $post)`, a $post array will usually be sent from an HTML form using the HTTP post method to the PHP script. The $post array must have certain keys which are listed in the *Required fields* table below as these are the names of the required columns in the SQL table that stores the data. Certain optional fields may be supplied.
+When an event is created using `Events::createEvent($db, $post)`, a $post array will usually have been sent from an HTML form using the HTTP post method to the PHP script. The $post array must have certain keys which should be the same as the names of the required fields (columns) in the SQL table that stores the data. Certain optional fields may be supplied and again these must have the same name as indicated below for the SQL table fields.
 
 ### Required fields
 
@@ -266,14 +218,14 @@ When an event is created using `Events::createEvent($db, $post)`, a $post array 
 | t_zone        | STR    | timezone for ts_st         | UTC−04:00  |
 | yr_end        | INT    | year event ends            | 2024       |
 | mth_end       | INT    | month event ends           | 1          |
-| day_end       | INT    | day event ends             | 31         |
-| hr_end        | INT    | day event ends             | 31         |
-| min_end       | INT    | day event ends             | 31         |
+| day_end       | INT    | day event ends             | 15         |
+| hr_end        | INT    | hour event ends            | 19         |
+| min_end       | INT    | minute event ends          | 45         |
 | locations_id  | INT FK | links to location          | 23         |
 | organizers_id | INT FK | links to organizer         | 19         |
 | alarms_id     | INT FK | links to alarms            | 556        |
 | detail        | STR    | detail about event         | filling    |
-| category      | STR    | one of many categor's      | work       |
+| category      | STR    | one of many categor's      | Medical    |
 
 ### Automatically generated fields
 
@@ -283,6 +235,10 @@ When an event is created using `Events::createEvent($db, $post)`, a $post array 
 | uid           | INT FK | User ID from session var   | 37         |
 | ts_ut_st      | INT    | UT timestamp for start     | 1672531200 |
 | ts_ut_end     | INT    | UT timestamp for end       | 1672531200 |
+
+### uid
+
+This need not be used but is available for a user id in the form of an integer to be stored in. If session based authentication is used the a uid should be available to populate this field. The uid can then be used to restrict access to events to those which contain the current user's uid.
 
 ### If minutes not submitted
 
@@ -300,7 +256,7 @@ These should be implemented by creating a $datetime string in which the date com
 
 In general this is unlikely to be an issue where all the users submitting events are using the same time zone. However if different users are submitting dates and times from different timezones then they should submit their timezone. The submitted timezone will be stored in the *t_zone*.
 
-If this is done, all dates and times will be converted to UT before calculating the Unix timestamp and storing it in the *ts_ut_st* and *ts_ut_end* fields. Note that *ts* stands for *timestamp*, *ut* stands for *universal time*, *st* stands for *start* (of the event) and *end* stands for *end* (of the event). A Unix timestamp is the number of seconds since 1 Jan 1970 00hr 00min 00sec UT).
+If this is done, all dates and times will be converted to UT before calculating the Unix timestamp and storing it in the *ts_ut_st* and *ts_ut_end* fields. Note that *ts* stands for *timestamp*, *ut* stands for *universal time*, *st* stands for *start* (of the event) and *end* stands for *end* (of the event). A Unix timestamp is the number of seconds since 1 Jan 1970 00hr 00min 00sec UT.
 
 The advantage of adjusting dates and times to UT before calculating and storing the information as a timestamp is that all the events can be retrieved in order of when they start in universal time which is the true order of their scheduled occurence. Retrieved timestamps can be adjusted if desired to any timezone if that is convenient for users living in different timezones.
 
@@ -348,57 +304,16 @@ This function persists HTML form post data to an SQL database. The required and 
 
 ### Events::getList($db, $yr=null, $mth = null, $day = null)
 
-This function returns an array of events ordered by ts_tz_st which is the UT timestamp of the start of an event. If $yr, $mth and $day are not supplied as arguments, all the events in the database will be returned. If only the year is provided as an argument all events for that year will be returned. If the year and month is provided, the events for that month are returned. If a year, month and day are provided then the events for that day will be returned.
+This function returns an array of events ordered by ts_ut_st which is the UT timestamp of the start of an event. If $yr, $mth and $day are not supplied as arguments, all the events in the database will be returned. If only the year is provided as an argument all events for that year will be returned. If the year and month is provided, the events for that month are returned. If a year, month and day are provided then the events for that day will be returned.
 
 ### Events::populateMonth($month)
 
-This method is used internally by the *Calendar* class when an *Events* object and PDO database object are passed to *createMonth() method: `Calendar::createMonth(obj $db, int $yr, int $mth, obj $events)`
+This method is used internally by the *Calendar* class when an *Events* object and PDO database object are passed to the *createMonth()* method: `Calendar::createMonth(obj $db, int $yr, int $mth, obj $events)`
 
-The $month argument must only contain days from the same month. It can be only part of the month. It handles the *prev*, *curr* and *nxt* months separately. It gets the year, month and day-of-the-month of the first (also the earliest) day in $month and creates a timestamp from these values called *$tsTzFrom*. Similarly it creates $tsTzTo from the last (also the latest) day in $month.
+The $month argument must only contain days from the same month. It can be only part of the month. It handles the *prev*, *curr* and *nxt* months separately. It gets the year, month and day-of-the-month of the first (also the earliest) day in $month and creates a timestamp from these values called *$tsUtFrom*. Similarly it creates $tsUtTo from the last (also the latest) day in $month.
 
-The events table and joined tables are queried for events between *$tsTzFrom* and *$tsTzTo*. The first column in the SELECT statement is *'day_st'*. in the PDO::fetchAll() method the *PDO::FETCH_GROUP* constant is used as an argument. So the returned array is grouped in subarrays, indexed by the day of the month (the values in *'day_st'*).
+The events table and joined tables are queried for events between *$tsUtFrom* and *$tsUtTo*. The first column in the SELECT statement is *'day_st'*. in the PDO::fetchAll() method the *PDO::FETCH_GROUP* constant is used as an argument. So the returned array is grouped in subarrays, indexed by the day of the month (the values in *'day_st'*).
 
-An example of an array returned by the SQL query from a month in which there were 2 events on the 6th of the month and one event on the 19th is shown below:
-
-```
-array(2) {
-  [6]=>
-  array(2) {
-    [0]=>
-    array(4) {
-      ["hr_st"]=>
-      int(10)
-      ["min_st"]=>
-      int(30)
-      ["title"]=>
-      string(7) "Dentist"
-      ["detail"]=>
-      string(22) "Extraction and filling"
-    }
-    [1]=>
-    array(3) {
-      ["hr_st"]=>
-      int(16)
-      ["min_st"]=>
-      int(37)
-      ["title"]=>
-      string(15) "Train to London"
-    }
-  }
-  [19]=>
-  array(1) {
-    [0]=>
-    array(3) {
-      ["hr_st"]=>
-      int(11)
-      ["min_st"]=>
-      int(0)
-      ["title"]=>
-      string(11) "Golf Course"
-    }
-  }
-}
-```
 Now the function iterates through each day in *$months* executing the following:
 
 ```
@@ -406,4 +321,4 @@ if($eventsArr[$months['days']['day']){
   $months['days']['day']['events'] = $eventsArr[$months['days']['day']];
 }
 ```
-The method returns the $month (month or part of a month of days) appended with an *"events* key with an array of events as value. If there are not events on a given day it will not be appended with an *"events"* key.
+The method returns the $month (month or part of a month of days) appended with an *"events* key with an array of events as value. If there are no events on a given day it will not be appended with an *"events"* key.
