@@ -134,24 +134,7 @@ var_dump($result);
 <?php
 calDemo($result);
 ?>
-<h2>Groups of 3</h2>
-<?php
-$arr = [26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5, 6];
-$i = 0;
-$iStop = 3;
-while(true){
-  echo '<p>';
-  for($i; $i < $iStop; $i++){
-    echo $arr[$i] . ', ';
-  }
-  echo '</p>';
-  if(isset($arr[$i + 1])){
-    $iStop = $iStop + 3;
-  } else {
-    break;
-  }
-}
-?>
+
 <?php } ?> 
 
 </body>
