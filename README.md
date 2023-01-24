@@ -569,3 +569,35 @@ array(5) {
   }
 }
 ```
+
+## Code Summary
+
+```
+/ u?N login or register
+  u?Y module ./main.js
+      import showMonth, showDay
+      fetchMonth(yr, mth NOW)
+        fetch PHP Calendar::createMonth(db, yr, mth, Events)
+          Calendar::createPrevMth > Events::populateMth
+          ditto CurrMth
+          ditto Nxt Mth
+          array_merge(prev, curr, nxt)
+          return month
+          showMonth
+      fetchDay(yr, mth, day, NOW)
+        fetch PHP Events::getList(db, yr, mth, day)
+        return events
+        showDay
+
+  Month Actions
+    right / left arrow
+      FetchMonth(yr, decremented / incremented mth)
+    tbody > day
+      FetchDay(yr, mth, day FOR CLICKED DAY)
+
+  Day Actions
+    + by date
+      Events::createEvent(mth, yr, day FOR DAY) > header /
+    - by event
+      Events::deleteEvent > header /
+```

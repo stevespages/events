@@ -13,19 +13,58 @@
 */
 table.cal-ev {
   border-collapse: collapse;
+  margin-top: 0;
 }
 table.cal-ev a{
   text-decoration: none;
 }
 table.cal-ev th, table.cal-ev td {
   border: 1px solid black;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
 }
-table.cal-ev td.prev a, table.cal-ev td.nxt a{
+table.cal-ev td {
+  padding-left: 0.4em;
+}
+table.cal-ev td.prev, table.cal-ev td.nxt {
   color: grey;
 }
-table.cal-ev td.events a {
+table.cal-ev td.today {
+  background-color: lightgray;
+}
+table.cal-ev td.events {
   color: red;
 }
-table.cal-ev td.no-events.curr a {
+table.cal-ev td.no-events.curr {
   color: black;
+}
+table.cal-ev caption #left-arrow-span, table.cal-ev caption #right-arrow-span{
+  font-size: 1.2em;
+  margin-bottom: 0;
+}
+
+/*
+  Media Queries
+  For styling $calendar->showMth();
+*/
+
+
+@media (max-width: 480px) {
+  table.cal-ev {
+    width: 100%;
+  }
+  table.cal-ev caption{
+    font-size: 1.2em;
+    padding-bottom: 0.4em;
+  }
+  table.cal-ev #left-arrow-span {
+    padding-right: 1.2em;
+  }
+  table.cal-ev #right-arrow-span {
+    padding-left: 1.2em;
+  }
+  div#day-div #add-span {
+    font-size: 1.2em;
+    padding-left: 1.2em;
+  }
 }

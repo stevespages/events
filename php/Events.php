@@ -71,6 +71,13 @@ class Events {
   
   }
 
+  public function deleteEvent($db, $id){
+    $sql = 'DELETE FROM events WHERE id = :id';
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+  }
+
   public function getList($db, $yr, $mth = null, $day = null) {
 
     // Valid arguments:
@@ -118,10 +125,8 @@ class Events {
     $data['ts-ut-from'] = $tsUtFrom;
     $data['ts-ut-to'] = $tsUtTo;
 
-    $sql = "SELECT title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
+    $sql = "SELECT id, title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
     $sql .= " AND ts_ut_st < :ts_ut_to";
-
-    // $sql = "SELECT title, detail FROM events";
     
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':ts_ut_from', $data['ts-ut-from']);

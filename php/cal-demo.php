@@ -1,7 +1,6 @@
 <?php
 function calDemo($month) {
     $days = $month['days'];
-    $numberWeeks = count($days) / 7;
     echo "<table class='cal-ev'>";
     echo "<caption>";
     echo "<a href='#'> < </a>";
@@ -36,4 +35,4 @@ function calDemo($month) {
     }
     echo '</tbody>';
     echo '</table>';
-  }
+}

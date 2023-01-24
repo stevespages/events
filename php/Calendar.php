@@ -37,12 +37,15 @@ class Calendar
     // 1 (for Monday) through 7 (for Sunday)
     $fdomAsdowAsN = date('N', mktime(0, 0, 0, $mth, 1, $yr));
 
+
+
     // number of days to show in prev month
     // if first day of month is Wed then...
     // ... $nodtsipm = 2 (ie Mon and Tues)
     $nodtsipm = $fdomAsdowAsN - 1;
 
     $nDaysInPrevMth = intval(date('t', mktime(0, 0, 0, $prevMth, 1, $prevYr)));
+
 
     for ($i = $nDaysInPrevMth - $nodtsipm + 1; $i < $nDaysInPrevMth + 1; $i++) {
       $day = [];
@@ -95,11 +98,15 @@ class Calendar
     $nxtMth = $this->createNxtMth($yr, $mth);
 
     if($db && $events){
-      $prevMth = $events->populateMonth($db, $prevMth);
+      if(count($prevMth) > 0){
+        $prevMth = $events->populateMonth($db, $prevMth);
+      }
       $currMth = $events->populateMonth($db, $currMth);
-      $nxtMth = $events->populateMonth($db, $nxtMth);
+      if(count($nxtMth) > 0){
+        $nxtMth = $events->populateMonth($db, $nxtMth);
+      }
     }
-    //return $prevMth;
+
     $days = array_merge($prevMth, $currMth, $nxtMth);
 
     $mthStr = date('F', mktime(0, 0, 0, $mth, 1, $yr));
@@ -113,4 +120,5 @@ class Calendar
 
     return $month;
   }
+
 }
