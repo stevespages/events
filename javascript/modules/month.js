@@ -1,11 +1,17 @@
 function showMonth(month){
   const days = month.days;
+  // caption element is hidden by css. It is for screen readers etc.
+  // caption element is relaced by <div id='table-caption-div'>
   let monthHTML = `
+    <div id='table-caption-div'>
+    <span id='left-arrow-span'> &lt; </span>
+    <span id='txt'>${month['mth-str']} ${month.yr}</span>
+    <span id='right-arrow-span'> &gt; </span>
+    <span id='user-icon'><a href='./user/'>&#x1F464</a></span>
+    </div>
     <table class='cal-ev'>
       <caption>
-        <span id='left-arrow-span'> &lt; </span>
         ${month['mth-str']} ${month.yr}
-        <span id='right-arrow-span'> &gt; </span>
       </caption>
       <thead>
       <tr>
@@ -13,7 +19,7 @@ function showMonth(month){
           <th>S</th><th>S</th>
       </tr>
       </thead>
-      <tbody id="month-tbody">
+      <tbody id='month-tbody'>
   `;
   const date = new Date();
   const todayYr = parseInt(date.getFullYear());
@@ -33,9 +39,9 @@ function showMonth(month){
         eventsDay = 'no-events';
       }
 
-      if(todayYr === month.yr && todayMth === month.mth
+      if(todayYr === days[i]['yr'] && todayMth === days[i]['mth']
         && todayDay === days[i]['day']){
-        today = 'today';
+        today = 'today selected-day';
       } else {
         today = 'not-today';
       }

@@ -8,19 +8,25 @@ class Events {
     $data['yr_st'] = intval(substr($post['date'], 0, 4));
     $data['mth_st'] = intval(substr($post['date'], 5, 2));
     $data['day_st'] = intval(substr($post['date'], -2));
+    // If time not set make it 0 (integer) so ts_ut can be calculated
+    /*
     if(isset($post['time'])) {
-      $data['hr_st'] = intval(substr($post['time'], 0, 2)) ? : null;
-      $data['min_st'] = intval((substr($post['time'], -2))) ? : null;
+      $data['hr_st'] = intval(substr($post['time'], 0, 2)) ? : 0;
+      $data['min_st'] = intval((substr($post['time'], -2))) ? : 0;
+    } else {
+      $data['hr_st'] = 0;
+      $data['min_st'] = 0;
     }
-
-    // I think you could just leave time out of it
-    // See strtotime() and date-and-time formats at php.net
-    // If time is not set make it '00:00' so ts_ut can be calculated
-    // what is the :00+0000 ??? seconds and thousandths of secs??
-    if(!isset($post['time']) || $post['time'] === ''){
-      $post['time'] = '00:00';
+    */
+    if(isset($post['time'])) {
+      $data['hr_st'] = substr($post['time'], 0, 2) ? : '00';
+      $data['min_st'] = (substr($post['time'], -2)) ? : '00';
+    } else {
+      $data['hr_st'] = '00';
+      $data['min_st'] = '00';
     }
-    $dateTimeStr = $post['date'] . "T" . $post['time'] . ":00+0000";
+    $dateTimeStr = $post['date'] . "T" . $data['hr_st'] . ':' .$data['min_st'] . ":00+0000";
+    // $dateTimeStr = $post['date'] . "T" . $post['time'] . ":00+0000";
     // this wants to be ts_ut. How can I ensure that?
     // this gives false if time is not set
     $data['ts_ut_st'] = strtotime($dateTimeStr);
@@ -125,8 +131,8 @@ class Events {
     $data['ts-ut-from'] = $tsUtFrom;
     $data['ts-ut-to'] = $tsUtTo;
 
-    $sql = "SELECT id, title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
-    $sql .= " AND ts_ut_st < :ts_ut_to";
+    $sql = "SELECT id, hr_st, min_st, title, detail FROM events WHERE ts_ut_st > :ts_ut_from";
+    $sql .= " AND ts_ut_st < :ts_ut_to ORDER BY ts_ut_st";
     
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':ts_ut_from', $data['ts-ut-from']);

@@ -1,6 +1,15 @@
 <?php
   session_start();
   require_once './php/error-reporting.php';
+  /*
+  * If the user is not logged in redirect them to ./user
+  *
+  * You could change Location to any path.
+  */
+  if(empty($_SESSION['user'])){
+    header('Location: ./user/');
+    exit();
+  }
 ?>
 
 <!DOCTYPE html>
@@ -14,30 +23,9 @@
     <title>Month</title>
   </head>
   <body>
-  <header>
-<?php
-  if (empty($_SESSION['user'])){
-    echo "<p><a href='./authentication/login/'>Login</a> or ";
-    echo "<a href='./authentication/register/'>Register</a></p>";
-  } else {
-    echo "<p>";
-    echo "Hallo ".$_SESSION['user'];
-    echo " | <a href='./authentication/logout/'>Logout</a>";
-    echo " | <a href='./authentication/close-account/'>Close Account</a>";
-    echo "</p>";
 
-    require_once './php/Events.php';
-    require_once './php/Calendar.php';
-    require_once './php/functions.php';
-    require_once './php/cal-demo.php';
-    require_once './config.php';
-
-?>
-  </header>
     <div id="month-div"></div>
     <div id="day-div"></div>
-
-<?php } ?>
 
   </body>
 </html>

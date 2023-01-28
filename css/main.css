@@ -38,10 +38,92 @@ table.cal-ev td.events {
 table.cal-ev td.no-events.curr {
   color: black;
 }
+table.cal-ev td.selected-day {
+  color: green !important;
+}
 table.cal-ev caption #left-arrow-span, table.cal-ev caption #right-arrow-span{
   font-size: 1.2em;
   margin-bottom: 0;
 }
+
+div#day-div span#date-span {
+  color: green;
+  font-size: large;
+}
+div#day-div span#add-span a, div#day-div span#delete-event-span a{
+  text-decoration: none;
+  font-size: large;
+  padding-left: 15px;
+  color: black;
+}
+div#day-div article.event-article {
+  background: lightgray;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+div#day-div article.event-article p {
+  margin-top: 0;
+  margin-bottom: 0;
+  
+}
+
+/*
+  caption element is for screen readers etc. It has been replaced by ...
+  ... <div id="table-caption-div">
+*/
+table.cal-ev caption {
+  display: none;
+}
+
+/**************************************************************
+
+  SECTION FOR <div id="table-caption-div">
+
+*/
+div#table-caption-div {
+  width: 100%;
+  vertical-align: bottom;
+  display: grid;
+  text-align: center;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-areas:
+    ". . l-arrow txt txt txt txt txt txt r-arrow . user-icon";
+}
+
+div#table-caption-div span#left-arrow-span {
+  grid-area: l-arrow;
+  color: red;
+  font-size: x-large;
+}
+
+div#table-caption-div span#right-arrow-span {
+  grid-area: r-arrow;
+  color: red;
+  margin-left: auto;
+  margin-right: 0;
+  font-size: x-large;
+}
+
+div#table-caption-div span#txt {
+  grid-area: txt;
+  vertical-align: bottom;
+}
+
+div#table-caption-div span#user-icon {
+  grid-area: user-icon;
+}
+
+table.cal-ev {
+  width: 100%;
+}
+
+table.cal-ev caption {
+  display: none;
+}
+
+/***************************************************************
+*/
 
 /*
   Media Queries

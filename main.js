@@ -21,6 +21,7 @@ function fetchMonth(queryString){
     .then((data) => {
       console.log(data);
       monthDiv.innerHTML = showMonth(data);
+      dayDiv.innerHTML = '';
       const leftArrow = document.querySelector('#left-arrow-span');
       leftArrow.addEventListener('click', function(){
         const currYr = queryString.get('yr');
@@ -50,6 +51,12 @@ function fetchMonth(queryString){
       });
       const monthTbody = document.querySelector('#month-tbody');
       monthTbody.addEventListener('click', function(event){
+        const selectedDays = document.querySelectorAll('.selected-day');
+        console.log('selectedDays', selectedDays);
+        for(let i = 0; i < selectedDays.length; i++){
+          selectedDays[i].classList.remove('selected-day');
+        }
+        event.target.classList.add('selected-day');
         const newQueryString = new URLSearchParams({
           yr: event.target.dataset.yr,
           mth: event.target.dataset.mth,
@@ -73,7 +80,7 @@ function fetchDay(queryString){
     .then((response) => response.json())
     // .then((data) => console.log(data));
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       showDay(data, queryString, dayDiv);
     });
 }
