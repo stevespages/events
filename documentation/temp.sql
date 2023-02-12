@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "events_new" (
+CREATE TABLE IF NOT EXISTS "meetups" (
   "id" INTEGER PRIMARY KEY,
   "uid" TEXT,
 
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS "events_new" (
   "ts_ut_end" INTEGER,
   "t_zone" TEXT,
 
+  "region" TEXT,
   "locations_id" INTEGER,
   "organizers_id" INTEGER,
   "alarms_id" INTEGER,

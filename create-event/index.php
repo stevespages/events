@@ -1,23 +1,19 @@
 <?php
-  session_start();
-
-  /*
-    * If the user is not logged in redirect them to
-    * website's home page.
-    *
-    * You could change Location to any path.
-    */
-  if(empty($_SESSION['user'])){
-    header('Location: ../'); // should be path to home page
-    exit();
-  }
 
   require_once '../php/error-reporting.php';
+
+  require_once '../config.php';
+
+  session_start();
+
+  if(empty($_SESSION['user'])){
+    header('Location: ' . $loginRedirectURL);
+    exit();
+  }
 
   if($_SERVER['REQUEST_METHOD'] === 'POST'){
     require_once '../php/Events.php';
     require_once '../php/Calendar.php';
-    //require_once '../php/functions.php';
     require_once '../config.php';
     $events = new Events();
     $calendar = new Calendar();
@@ -58,20 +54,22 @@
   </head>
   <body>
   <h1>Create Event</h2>
-  <form method = "post" class="simple-form">
-    <fieldset>
-      <legend>Create an Event</legend>
-      <label for="title">Title</label>
-      <input id="title" type="text" name="title">
-      <label for="detail">Detail</label>
-      <input id="detail" type="text" name="detail">
-      <label for="date">Date</label>
-      <input id="date" value="<?= $dateValue ?>" type="date" name="date">
-      <label for="time">Time</label>
-      <input id="time" type="time" name="time">
-      <input type="submit">
-      <a href="../">Cancel</a>
-    </fieldset>
-  </form>
+    <form method = "post" class="simple-form">
+      <fieldset>
+        <legend>Create an Event</legend>
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title">
+        <label for="detail">Detail</label>
+        <input id="detail" type="text" name="detail">
+        <label for="date">Date</label>
+        <input id="date" value="<?= $dateValue ?>" type="date" name="date">
+        <label for="time">Start Time</label>
+        <input id="time" type="time" name="start-time">
+        <label for="time">End Time</label>
+        <input id="time" type="time" name="end-time">
+        <input type="submit">
+        <a href="../">Cancel</a>
+      </fieldset>
+    </form>
   </body>
 </html>

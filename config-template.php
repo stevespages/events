@@ -7,3 +7,6 @@
   } catch (Exception $e) {    
     $error = $e->getMessage();
   }
+
+  $loginRedirectURL = 'https://example.com';
+  

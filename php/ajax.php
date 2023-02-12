@@ -1,10 +1,18 @@
 <?php
 
-  require_once '../php/error-reporting.php';
+  require_once './php/error-reporting.php';
+
+  require_once '../config.php';
+
+  session_start();
+
+  if(empty($_SESSION['user'])){
+    header('Location: ' . $loginRedirectURL);
+    exit();
+  }
+
   require_once '../php/Events.php';
   require_once '../php/Calendar.php';
-  require_once '../php/cal-demo.php';
-  require_once '../config.php';
 
   $events = new Events();
   $calendar = new Calendar();

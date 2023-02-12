@@ -1,15 +1,16 @@
 <?php
-  session_start();
+
   require_once './php/error-reporting.php';
-  /*
-  * If the user is not logged in redirect them to ./user
-  *
-  * You could change Location to any path.
-  */
+
+  require_once './config.php';
+
+  session_start();
+
   if(empty($_SESSION['user'])){
-    header('Location: ./user/');
+    header('Location: ' . $loginRedirectURL);
     exit();
   }
+
 ?>
 
 <!DOCTYPE html>

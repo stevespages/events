@@ -1,18 +1,15 @@
 <?php
-  session_start();
-
-  /*
-    * If the user is not logged in redirect them to
-    * website's home page.
-    *
-    * You could change Location to any path.
-    */
-  if(empty($_SESSION['user'])){
-    header('Location: ../'); // should be path to home page
-    exit();
-  }
 
   require_once '../php/error-reporting.php';
+
+  require_once '../config.php';
+
+  session_start();
+
+  if(empty($_SESSION['user'])){
+    header('Location: ' . $loginRedirectURL);
+    exit();
+  }
 
   if($_SERVER['REQUEST_METHOD'] === 'POST'){
     require_once '../php/Events.php';

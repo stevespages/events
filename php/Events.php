@@ -18,12 +18,19 @@ class Events {
       $data['min_st'] = 0;
     }
     */
-    if(isset($post['time'])) {
-      $data['hr_st'] = substr($post['time'], 0, 2) ? : '00';
-      $data['min_st'] = (substr($post['time'], -2)) ? : '00';
+    if(isset($post['start-time'])) {
+      $data['hr_st'] = substr($post['start-time'], 0, 2) ? : '00';
+      $data['min_st'] = substr($post['start-time'], -2) ? : '00';
     } else {
       $data['hr_st'] = '00';
       $data['min_st'] = '00';
+    }
+    if(isset($post['end-time'])) {
+      $data['hr_end'] = substr($post['end-time'], 0, 2) ? : '00';
+      $data['min_end'] = substr($post['end-time'], -2) ? : '00';
+    } else {
+      $data['hr_end'] = '00';
+      $data['min_end'] = '00';
     }
     $dateTimeStr = $post['date'] . "T" . $data['hr_st'] . ':' .$data['min_st'] . ":00+0000";
     // $dateTimeStr = $post['date'] . "T" . $post['time'] . ":00+0000";
