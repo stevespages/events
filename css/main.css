@@ -19,7 +19,7 @@ table.cal-ev a{
   text-decoration: none;
 }
 table.cal-ev th, table.cal-ev td {
-  border: 1px solid black;
+  border: 1px solid lightgray;
   padding-top: 0.4em;
   padding-bottom: 0.4em;
 }
@@ -35,11 +35,18 @@ table.cal-ev td.today {
 table.cal-ev td.events {
   color: red;
 }
+/* I removed day-number-span class as causes a bug.
+table.cal-ev span.day-number-span.events{
+  border: 1px solid black;
+  border-radius: 50%;
+  background-color: red;
+}
+*/
 table.cal-ev td.no-events.curr {
   color: black;
 }
 table.cal-ev td.selected-day {
-  color: green !important;
+  text-decoration: underline black;
 }
 table.cal-ev caption #left-arrow-span, table.cal-ev caption #right-arrow-span{
   font-size: 1.2em;

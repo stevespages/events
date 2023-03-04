@@ -27,6 +27,7 @@
 
     <div id="month-div"></div>
     <div id="day-div"></div>
+    <div id="virtualcrossing-div"></div>
 
   </body>
 </html>

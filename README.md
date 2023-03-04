@@ -6,7 +6,7 @@ A PHP *Calendar* class is also included which can generate arrays of days spanni
 
 The *Events* and *Calendar* classes can be used together to generate arrays of days which include event data in them.
 
-A number of other PHP and JavaScript files are included which contain code for displaying and creating events and calendars.
+A number of other PHP and JavaScript files are included which contain code for displaying and creating events in a month-view calendar. This can be used as a personal organizer. The *virtualcrossing* API has been integrated with the calendar so that the weather forecast for the next 15 days can be seen for today's date.
 
 ## *Calendar* class
 

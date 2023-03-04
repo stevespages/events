@@ -55,6 +55,10 @@ function showMonth(month){
       monthHTML += ` data-mth='${days[i]['mth']}'`;
       monthHTML += ` data-day='${days[i]['day']}'>`;
       monthHTML += `${days[i]['day']}</td>`;
+      /*
+      monthHTML += `<span class='day-number-span ${eventsDay}'>`;
+      monthHTML += `${days[i]['day']}</span></td>`;
+      */
     }
     monthHTML += '</tr>';
     if(typeof(days[i + 1]) !== 'undefined'){
