@@ -8,6 +8,8 @@ The *Events* and *Calendar* classes can be used together to generate arrays of d
 
 A number of other PHP and JavaScript files are included which contain code for displaying and creating events in a month-view calendar. This can be used as a personal organizer. The *virtualcrossing* API has been integrated with the calendar so that the weather forecast for the next 15 days can be seen for today's date.
 
+![alt text](https://github.com/stevespages/events/assets/photos/raw/screenshot_calendar.jpg "Screenshot of calendar")
+
 ## *Calendar* class
 
 ### Calendar::createMonth(obj $db, int $yr, int $mth, obj $events)
